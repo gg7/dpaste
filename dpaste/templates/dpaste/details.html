@@ -31,10 +31,6 @@
         {% trans "One-Time snippet" %}
       {% endif %}
     </li>
-    <li class="sep"></li>
-    <li>
-      <a href="#delete">{% trans "Delete Now" %}</a>
-    </li>
     {% if snippet.expire_type != 3 %}
       <li><a href="{% url "snippet_details_raw" snippet.secret_id %}">{% trans "View Raw" %}</a></li>
     {% endif %}
@@ -46,15 +42,6 @@
       </li>
     {% endif %}
   </ul>
-
-  <div id="delete" class="confirm-modal">
-    <form method="POST" action="">
-      {% csrf_token %}
-      {% trans "Are you sure to delete this snippet?" %}
-      <button class="btn" name="delete" value="1" type="submit">{% trans "Yes, Delete" %}</button>
-      <a href="#" class="no">{% trans "No, don't delete" %}</a>
-    </form>
-  </div>
 {% endblock %}
 
 {% block page %}

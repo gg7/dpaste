@@ -156,46 +156,6 @@ class SnippetTestCase(TestCase):
         self.assertEqual(Snippet.objects.count(), 1)
 
     # -------------------------------------------------------------------------
-    # Delete
-    # -------------------------------------------------------------------------
-    def test_snippet_delete_post(self):
-        """
-        You can delete a snippet by passing the slug in POST.snippet_id
-        """
-        data = self.valid_form_data()
-        self.client.post(self.new_url, data, follow=True)
-
-        snippet_id = Snippet.objects.all()[0].secret_id
-        url = reverse('snippet_details', kwargs={'snippet_id': snippet_id})
-        response = self.client.post(url, {'delete': 1}, follow=True)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Snippet.objects.count(), 0)
-
-    def test_snippet_delete_that_doesnotexist_returns_404(self):
-        data = self.valid_form_data()
-        self.client.post(self.new_url, data, follow=True)
-
-        url = reverse('snippet_details', kwargs={'snippet_id': 'doesnotexist'})
-        response = self.client.post(url, {'delete': 1}, follow=True)
-
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(Snippet.objects.count(), 1)
-
-    def test_snippet_delete_do_not_pass_delete_action(self):
-        data = self.valid_form_data()
-        self.client.post(self.new_url, data, follow=True)
-
-        # Do not pass delete=1
-        snippet_id = Snippet.objects.all()[0].secret_id
-        url = reverse('snippet_details', kwargs={'snippet_id': snippet_id})
-        response = self.client.post(url, {}, follow=True)
-
-        # Returns regular snippet details page
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Snippet.objects.count(), 1)
-
-    # -------------------------------------------------------------------------
     # Snippet Functions
     # -------------------------------------------------------------------------
     def test_raw(self):
@@ -253,28 +213,6 @@ class SnippetTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Snippet.objects.count(), 1)
-
-    def test_snippet_history_delete_all(self):
-        # Empty list, delete all raises no error
-        response = self.client.post(
-            reverse('snippet_history'), {'delete': 1}, follow=True
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Snippet.objects.count(), 0)
-
-        # Create two sample pasts
-        data = self.valid_form_data()
-        self.client.post(self.new_url, data, follow=True)
-        data = self.valid_form_data()
-        self.client.post(self.new_url, data, follow=True)
-        self.assertEqual(Snippet.objects.count(), 2)
-
-        # Delete all of them
-        response = self.client.post(
-            reverse('snippet_history'), {'delete': 1}, follow=True
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Snippet.objects.count(), 0)
 
     # -------------------------------------------------------------------------
     # Management Command

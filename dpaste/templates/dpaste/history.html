@@ -8,8 +8,6 @@
   <ul id="snippetOptions">
     <li>{% trans "Snippet History" %}</li>
     {% if snippet_list %}
-    <li class="sep"></li>
-    <li><a href="#delete">{% trans "Delete all Snippets" %}</a></li>
     <li>
       {# Wordwrap is enabled by default for all lexer in the history #}
       <label for="wordwrap">
@@ -19,18 +17,6 @@
     {% endif %}
   </ul>
 
-  <div id="delete" class="confirm-modal">
-    <form method="POST" action="">
-      {% csrf_token %}
-      {% blocktrans count snippet_list|length as count %}
-        Do you really want to delete the snippet below?
-      {% plural %}
-        Do you really want to delete the {{ count }} snippets below?
-      {% endblocktrans %}
-      <button class="btn" name="delete" value="1" type="submit">{% trans "Yes, Delete All" %}</button>
-      <a href="#" class="no">{% trans "No, don't delete" %}</a>
-    </form>
-  </div>
 {% endblock %}
 
 {% block page %}

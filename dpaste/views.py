@@ -64,23 +64,6 @@ class SnippetDetailView(SnippetView, DetailView):
     slug_url_kwarg = 'snippet_id'
     slug_field = 'secret_id'
 
-    def post(self, request, *args, **kwargs):
-        """
-        Delete a snippet. This is allowed by anybody as long as he knows the
-        snippet id. I got too many manual requests to do this, mostly for legal
-        reasons and the chance to abuse this is not given anyway, since snippets
-        always expire.
-        """
-        if 'delete' in self.request.POST:
-            snippet = get_object_or_404(Snippet, secret_id=self.kwargs['snippet_id'])
-            snippet.delete()
-
-            # Append `#` so #delete goes away in Firefox
-            url = '{0}#'.format(reverse('snippet_new'))
-            return HttpResponseRedirect(url)
-
-        return super(SnippetDetailView, self).post(request, *args, **kwargs)
-
     def get(self, request, *args, **kwargs):
         snippet = self.get_object()
 
@@ -165,17 +148,6 @@ class SnippetHistory(TemplateView):
     def get_user_snippets(self):
         snippet_id_list = self.request.session.get('snippet_list', [])
         return Snippet.objects.filter(pk__in=snippet_id_list)
-
-    def post(self, request, *args, **kwargs):
-        """
-        Delete all user snippets at once.
-        """
-        if 'delete' in self.request.POST:
-            self.get_user_snippets().delete()
-
-        # Append `#` so #delete goes away in Firefox
-        url = '{0}#'.format(reverse('snippet_history'))
-        return HttpResponseRedirect(url)
 
     def get_context_data(self, **kwargs):
         ctx = super(SnippetHistory, self).get_context_data(**kwargs)
