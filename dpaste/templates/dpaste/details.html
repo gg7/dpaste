@@ -66,9 +66,11 @@
 
   {{ snippet.highlight }}
 
+  {% if request.GET.edit %}
   <header class="sub">
     <h2>{% trans "Edit this Snippet" %}</h2>
   </header>
 
   {% include "dpaste/includes/form.html" %}
+  {% endif %}
 {% endblock %}
