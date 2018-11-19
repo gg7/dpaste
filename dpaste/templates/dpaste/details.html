@@ -7,6 +7,8 @@
 {% block body_type %}{%endblock %}
 
 {% block headline %}
+  <a class="home" href="{% url "snippet_new" %}">dpaste</a>
+  <div style="display:inline">|</div>
   <a href="{{ request.build_absolute_uri }}">{{ request.build_absolute_uri }}</a>
 
   <a href="#" id="copyToClipboard" title="{% trans "Copy URL to clipboard" %}">
